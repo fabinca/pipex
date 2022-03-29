@@ -6,17 +6,17 @@
 /*   By: cfabian <cfabian@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 14:16:25 by cfabian           #+#    #+#             */
-/*   Updated: 2022/02/01 13:20:45 by cfabian          ###   ########.fr       */
+/*   Updated: 2022/03/29 16:31:43 by cfabian          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
 
-static void	parent_process(t_data *dt, pid_t pid)
+static void	parent_process(t_data *dt) //, pid_t pid
 {
 	close(dt->oldpipe[0]);
 	close(dt->oldpipe[1]);
-	waitpid(pid, NULL, 0);
+	//waitpid(pid, NULL, 0);
 	dup2(dt->newpipe[0], dt->oldpipe[0]);
 	close(dt->newpipe[0]);
 	dup2(dt->newpipe[1], dt->oldpipe[1]);
@@ -71,7 +71,7 @@ static int	pipex(t_data *dt, char **envp, int count)
 		child_process(dt, envp, count);
 	else
 	{
-		parent_process(dt, pid);
+		parent_process(dt); // pid
 		pipex(dt, envp, count + 1);
 	}
 	return (0);
